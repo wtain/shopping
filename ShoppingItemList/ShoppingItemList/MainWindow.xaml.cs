@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 
 using MongoDB.Bson;
 using MongoDB.Driver;
+using ShoppingItemList.ViewModels;
 
 namespace ShoppingItemList
 {
@@ -23,15 +24,19 @@ namespace ShoppingItemList
     /// </summary>
     public partial class MainWindow : Window
     {
-        protected static IMongoClient _client;
-        protected static IMongoDatabase _database;
+        public static readonly DependencyProperty ApplicationProperty =
+            DependencyProperty.Register("Application", typeof(ApplicationViewModel), typeof(MainWindow));
+
+        public ApplicationViewModel Application
+        {
+            get { return (ApplicationViewModel)GetValue(ApplicationProperty); }
+            private set { SetValue(ApplicationProperty, value); }
+        }
 
         public MainWindow()
         {
+            Application = new ApplicationViewModel();
             InitializeComponent();
-
-            _client = new MongoClient();
-            _database = _client.GetDatabase("shopping");
         }
     }
 }

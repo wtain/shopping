@@ -5,8 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShoppingItemList"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Name="winMain"
+        Title="ShoppingItemList" Height="350" Width="300" Margin="2"
+        DataContext="{Binding Application, ElementName=winMain}">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="24" />
+            <RowDefinition />
+            <RowDefinition Height="24" />
+        </Grid.RowDefinitions>
         
+        <ComboBox Grid.Row="0" ItemsSource="{Binding Shops}" SelectedItem="{Binding SelectedShop}" Margin="2" />
+
+        <ListView Grid.Row="1" Margin="2" ItemsSource="{Binding ItemsInShop}" />
+
+        <DockPanel Grid.Row="2" Margin="2">
+            <Button Content="Add" Width="80" Command="{Binding AddCommand}" />
+            <Button Content="Remove" Width="80" />
+            <Button Content="Exit" Width="80" HorizontalAlignment="Right" Command="{Binding ExitCommand}" />
+        </DockPanel>
     </Grid>
 </Window>
