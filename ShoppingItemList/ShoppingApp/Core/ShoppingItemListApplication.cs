@@ -19,6 +19,8 @@ namespace ShoppingApp.Core
         private static readonly string _databaseName = "shopping";
         private static IMongoCollection<ShoppingItem> _shoppingItems;
 
+        public static readonly string AllItems = "(Всё)";
+
         protected static IMongoClient MongoClient
         {
             get
@@ -80,6 +82,8 @@ namespace ShoppingApp.Core
 
         public IEnumerable<ShoppingItem> EnumItemsInShop(string shopName)
         {
+            if (shopName == AllItems)
+                return ShoppingItems.Find(i => true).ToEnumerable();
             return ShoppingItems.Find(item => item.ShopNames.Contains(shopName)).ToEnumerable();
         }
 
@@ -94,7 +98,7 @@ namespace ShoppingApp.Core
             return ShoppingItems.Aggregate()
                 .Unwind<ShoppingItem, UnwoundShoppingItem>(x => x.ShopNames)
                 .Group(x => x.ShopNames, g => new { Id = g.Key } )
-                .ToEnumerable().Select(x => x.Id);
+                .ToEnumerable().Select(x => x.Id).Union(AllItems.ToEnumerable());
         }
     }
 }
